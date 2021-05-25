@@ -1,0 +1,40 @@
+.sidebar{
+    min-width: 300px;
+    height: 600px;
+    overflow-y: auto;
+}
+.ant-collapse-item-active >.ant-collapse-header{
+    font-weight: 700;
+    background-color: darkgray;
+}
+.categories-content-box-none > .ant-collapse-content >.ant-collapse-content-box{
+    display: none;
+}
+.Prices .categories-content-box-none{
+    
+}
+.facet .facet-title{
+    padding: 1rem 0;
+    color: gray;
+}
+.types >.ant-checkbox-group{
+    display: flex;
+    flex-direction: column;
+}
+.ant-radio-inner{
+    display: none !important;
+}
+.prices-input {
+    padding-bottom: 1rem;
+}
+.btn-go{
+    width: 50px;
+}
+.dataEmpty{
+    display: block;
+    width: 100%;
+    font-size: 35px;
+    color: brown;
+    font-weight: 700;
+    text-align: center;
+}

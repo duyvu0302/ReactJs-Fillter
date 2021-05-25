@@ -1,0 +1,34 @@
+.container-product{
+    width: 100%;
+    padding: 0 1rem;
+}
+.container-title{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+}
+.ratings .ant-collapse{
+    border: unset !important;
+    background-color: unset !important;
+}
+.ratings .ant-collapse-item{
+    border: unset !important;
+}
+.ratings .ant-collapse-header{
+    display: flex;
+    padding: unset !important;
+}
+.ratings .ant-collapse-header > .anticon{
+    display: none !important;
+}
+.product-list .product-item > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.product-list .product-item >div .info{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
