@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Collapse, Button, Checkbox, Rate, InputNumber, Form } from "antd";
+import {connect} from 'react-redux';
+
 import "./style.css";
 const { Panel } = Collapse;
 
@@ -356,4 +358,5 @@ function Sidebar(prop) {
   );
 }
 
-export default Sidebar;
+
+export default connect()(Sidebar);
