@@ -1,20 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Input, Space,Row } from 'antd';
-
+import {connect} from 'react-redux';
+import {setSearchKey} from '../../redux/actions';
 import './style.css';
-import Form from "antd/lib/form/Form";
 const { Search } = Input;
-
 
 
 function header(prop) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const typingTimeoutRef = useRef(null)
-  const {setSearchKey,onSubmit} = prop;
+  const {setSearchKey} = prop;
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [search,setSearch] = useState('');
-  const onSearch = value => console.log(value);
-  
+ 
   const handleChange=(e)=>{
     const value = e.target.value
     setSearch(value)
@@ -27,6 +25,7 @@ function header(prop) {
         search: value,
       };
       setSearchKey(formValue)
+
     },1000)
   }
 
@@ -50,5 +49,17 @@ function header(prop) {
     </>
   );
 }
+const mapStateToProps = (state)=>{
+  console.log("mapStateToProps -> state", state)
+  const {searchKey} = state.productReducer;
+  return{
+    searchKey
+  }
+}
+const mapDispatchToProps =(dispatch)=>{
+  return {
+    setSearchKey : (params)=>dispatch(setSearchKey(params))
+  }
+}
 
-export default header;
+export default connect(mapStateToProps,mapDispatchToProps)(header);

@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Collapse, Button, Checkbox, Rate, InputNumber, Form } from "antd";
 import {connect} from 'react-redux';
 
+import {
+  setCurrentPage,
+  getProductList,
+  setCategories,
+  setCategoriesChild,
+  setPrice,
+  setBrand,
+  setBox,
+  setRating,
+  setGb,
+  setInch
+} from '../../redux/actions';
+
 import "./style.css";
 const { Panel } = Collapse;
 
@@ -21,7 +34,17 @@ function Sidebar(prop) {
     price,
     setGb,
     setInch,
+    currentPage
   } = prop;
+  const [isChecked, setIsChecked] = useState(false);
+  const [input, setInput] = useState();
+  const [input1, setInput1] = useState();
+  const [isShowBtn, setIsShowBtn] = useState(false);
+  const [containPrice, setContainPrice] = useState();
+  const [showCollapse, setIsShowCollapse] = useState(false);
+  const [showCollapseRating, setIsShowCollapseRating] = useState(false);
+  const [showCollapsePrice, setIsShowCollapsePrice] = useState(false);
+  
   useEffect(() => {
     if (
       !categories &&
@@ -32,7 +55,7 @@ function Sidebar(prop) {
     ) {
       setIsShowBtn(false);
     }
-  }, [categories, box, brand, rating, price]);
+  }, [categories, box, brand, rating, price,currentPage]);
 
   const optionsTypes = [
     { label: "Có ốp", value: 2 },
@@ -82,12 +105,7 @@ function Sidebar(prop) {
     { id: 4, price: "$ 500 - 1000" },
   ];
 
-  const [isChecked, setIsChecked] = useState(false);
-  const [input, setInput] = useState();
-  const [input1, setInput1] = useState();
-  const [isShowBtn, setIsShowBtn] = useState(false);
-  const [contaiPrice, setContaiPrice] = useState();
-  const [showCollapse, setIsShowCollapse] = useState(false);
+ 
   const onChangeCategories = (key) => {
     setGb(null);
     setInch(null);
@@ -122,15 +140,16 @@ function Sidebar(prop) {
     if (key) {
       setIsShowBtn(true);
     }
+    
   };
   const onChangeRating = (key) => {
     setRating(key);
     setCurrentPage(1);
     if (key) {
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapseRating(true);
     } else {
-      setIsShowCollapse(!showCollapse);
+      setIsShowCollapseRating(!showCollapse);
     }
   };
   const onChangeBrand = (key) => {
@@ -142,16 +161,15 @@ function Sidebar(prop) {
   };
 
   const onChangePrice = (key) => {
-    console.log("onChangePrice -> key", key)
     let value;
-    setContaiPrice(key)
+    setContainPrice(key)
     if (key == 1) {
       value = [0, 50];
       setPrice(value);
       setInput1(value[1]);
       setInput("");
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapsePrice(true);
 
     }
     if (key == 2) {
@@ -160,7 +178,7 @@ function Sidebar(prop) {
       setInput(value[0]);
       setInput1(value[1]);
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapsePrice(true);
 
     }
     if (key == 3) {
@@ -169,7 +187,7 @@ function Sidebar(prop) {
       setInput(value[0]);
       setInput1(value[1]);
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapsePrice(true);
 
     }
     if (key == 4) {
@@ -178,7 +196,7 @@ function Sidebar(prop) {
       setInput(value[0]);
       setInput1(value[1]);
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapsePrice(true);
 
     }
     if (key == 5) {
@@ -187,7 +205,7 @@ function Sidebar(prop) {
       setInput(value[0]);
       setInput1("");
       setIsShowBtn(true);
-      setIsShowCollapse(true);
+      setIsShowCollapsePrice(true);
     }
     if (key == 6) {
       if (isChecked === true) {
@@ -196,16 +214,16 @@ function Sidebar(prop) {
         setIsShowBtn(true);
       }
       if (isChecked === false) {
-        setPrice(null);
+        setPrice([]);
         setInput("");
         setInput1("");
       }
     }
     if (key == undefined) {
-      setPrice(null);
+      setPrice([]);
       setInput("");
       setInput1("");
-      setIsShowCollapse(!showCollapse);
+      setIsShowCollapsePrice(!showCollapse);
     }
     setCurrentPage(1);
   };
@@ -220,11 +238,13 @@ function Sidebar(prop) {
   };
   const handleClearFilter = () => {
     setIsShowCollapse(false);
+    setIsShowCollapseRating(false);
+    setIsShowCollapsePrice(false);
     setCategories(null);
-    setBox(null);
-    setBrand(null);
+    setBox([]);
+    setBrand([]);
     setRating(null);
-    setPrice(null);
+    setPrice([]);
     setInput("");
     setInput1("");
   };
@@ -290,12 +310,15 @@ function Sidebar(prop) {
           </div>
           <div className="facet-title">Brand</div>
           <div className="brand types">
-            <Checkbox.Group value={brand} options={optionsBrand} onChange={onChangeBrand} />
+            <Checkbox.Group
+             value={brand}
+              options={optionsBrand}
+               onChange={onChangeBrand} />
           </div>
           <div className="facet-title">Ratings</div>
           <div className="ratings types">
             <Collapse 
-              activeKey={[`${showCollapse === true ? rating : ""}`]}
+              activeKey={[`${showCollapseRating === true ? rating : ""}`]}
               onChange={onChangeRating} accordion>
               {ratingData.map((item, index) => {
                 return (
@@ -317,7 +340,7 @@ function Sidebar(prop) {
           <div className="facet-title">Prices</div>
           <div className="Prices ratings">
             <Collapse 
-              activeKey={[`${showCollapse === true ? contaiPrice : ""}`]}
+              activeKey={[`${showCollapsePrice === true ? containPrice : ""}`]}
 
               onChange={onChangePrice} accordion>
               <Panel
@@ -358,5 +381,26 @@ function Sidebar(prop) {
   );
 }
 
+const mapStateToProps = (state)=>{
+  const {productList,rating,box,brand,categories,categoriesChild,price,gb,inch} = state.productReducer
+  return {
+    productList,
+    rating,box,brand,categories,categoriesChild,price,gb,inch
+  }
+}
+const mapDispatchToProps = (dispatch)=>{
+  return{
+    getProductList : (params)=>dispatch(getProductList(params)),
+    setBox : (params)=>dispatch(setBox(params)),
+    setCategories : (params)=>dispatch(setCategories(params)),
+    setCategoriesChild : (params)=>dispatch(setCategoriesChild(params)),
+    setBrand : (params)=>dispatch(setBrand(params)),
+    setPrice : (params)=>dispatch(setPrice(params)),
+    setRating : (params)=>dispatch(setRating(params)),
+    setGb:(params)=>dispatch(setGb(params)),
+    setInch:(params)=>dispatch(setInch(params)),
+    setCurrentPage:(params)=>dispatch(setCurrentPage(params))
+  }
+}
 
-export default connect()(Sidebar);
+export default connect(mapStateToProps,mapDispatchToProps)(Sidebar);
